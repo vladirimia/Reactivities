@@ -2,6 +2,8 @@ using Microsoft.EntityFrameworkCore;
 using Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
+const string _corsPolicy = "CorsPolicy";
+const string _defaultSqlConnection = "DefaultConnection";
 
 // Add services to the container.
 
@@ -11,7 +13,17 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<DataContext>(opt =>
 {
-    opt.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
+    opt.UseSqlite(builder.Configuration.GetConnectionString(_defaultSqlConnection));
+});
+
+builder.Services.AddCors(opt =>
+{
+    opt.AddPolicy(_corsPolicy, policy =>
+    {
+        policy.AllowAnyHeader()
+        .AllowAnyMethod()
+        .WithOrigins("http://localhost:3000");
+    });
 });
 
 var app = builder.Build();
@@ -22,6 +34,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors(_corsPolicy);
 
 app.UseAuthorization();
 
