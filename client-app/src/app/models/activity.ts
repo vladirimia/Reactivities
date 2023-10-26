@@ -39,7 +39,7 @@ export class Activity implements IActivity {
   isGoing: boolean = false;
   isHost: boolean = false;
   host?: Profile;
-  attendees?: Profile[];
+  attendees: Profile[] = [];
 }
 
 export class ActivityFormValues {
