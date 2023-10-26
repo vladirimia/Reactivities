@@ -1,7 +1,6 @@
 import { makeAutoObservable, runInAction } from "mobx";
 import { Activity, ActivityFormValues } from "../models/activity";
 import agent from "../api/agent";
-import { v4 as uuid } from "uuid";
 import { format } from "date-fns";
 import { store } from "./store";
 import { Profile } from "../models/profile";
@@ -80,8 +79,8 @@ export default class ActivityStore {
 
         if (user) {
             activity.isGoing = activity.attendees!.some(a => a.username === user.username);
-            activity.isHost = activity.hostUserName === user.username;
-            activity.host = activity.attendees?.find(x => x.username === activity.hostUserName);
+            activity.isHost = activity.hostUsername === user.username;
+            activity.host = activity.attendees?.find(x => x.username === activity.hostUsername);
         }
 
         activity.date = new Date(activity.date!);
@@ -103,7 +102,7 @@ export default class ActivityStore {
         try {
             await agent.Activities.create(activity);
             const newActivity = new Activity(activity);
-            newActivity.hostUserName = user!.username;
+            newActivity.hostUsername = user!.username;
             newActivity.attendees = [attendee];
             this.setActivity(newActivity);
 
@@ -189,5 +188,9 @@ export default class ActivityStore {
         } finally {
             runInAction(() => this.loading = false);
         }
+    }
+
+    clearSelectedActivity = () => {
+        this.selectedActivity = undefined;
     }
 }

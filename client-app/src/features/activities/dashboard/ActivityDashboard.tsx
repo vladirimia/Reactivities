@@ -14,7 +14,7 @@ export default observer(function ActivityDashboard() {
         if (activityRegistry.size <= 1) {
             loadActivities();
         }
-    }, [activityRegistry.size, loadActivities]) // only called once
+    }, [loadActivities, activityRegistry.size]) // only called once
 
     if (activityStore.loadingInitial) {
         return <LoadingComponents content='Loading activities...' />

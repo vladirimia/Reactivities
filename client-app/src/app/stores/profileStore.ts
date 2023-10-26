@@ -14,9 +14,10 @@ export default class ProfileStore {
     }
 
     get isCurrentUser() {
-        return store.userStore.user && this.profile
-            ? store.userStore.user.username === this.profile.username
-            : false;
+        if (store.userStore.user && this.profile) {
+            return store.userStore.user.userName === this.profile.username;
+        }
+        return false;
     }
 
     loadProfile = async (username: string) => {

@@ -22,6 +22,8 @@ export default observer(function ProfilePage() {
         return <LoadingComponents content="Loading profiles..." />
     }
 
+    if (!profile) return <h2>Problem loading profile</h2>
+
     return (
         <Grid>
             <Grid.Column width={16}>
